@@ -48,7 +48,7 @@ Parse the output to extract:
 Locate and run the TypeScript search script included with this skill (runs via `npx -y bun`):
 
 ```bash
-SKILL_DIR=$(find ~/.claude/skills .claude/skills -name "search_github.ts" -path "*/find-skill/*" -exec dirname {} \; 2>/dev/null | head -1)
+SKILL_DIR=$(find ~/.claude/skills .claude/skills -name "search_github.ts" -path "*/inm-skill-finder/*" -exec dirname {} \; 2>/dev/null | head -1)
 SKILL_DIR=$(dirname "$SKILL_DIR")  # go up from scripts/ to skill root
 npx -y bun run "$SKILL_DIR/scripts/search_github.ts" keyword1 keyword2 --descriptions
 ```

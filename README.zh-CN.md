@@ -38,11 +38,11 @@ npx skills add innomad-io/inm-skill-finder -g
 
 ```bash
 # 项目级别
-mkdir -p .claude/skills/find-skill
-curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/SKILL.md -o .claude/skills/find-skill/SKILL.md
-curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/registries.json -o .claude/skills/find-skill/registries.json
-mkdir -p .claude/skills/find-skill/scripts
-curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/scripts/search_github.ts -o .claude/skills/find-skill/scripts/search_github.ts
+mkdir -p .claude/skills/inm-skill-finder
+curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/SKILL.md -o .claude/skills/inm-skill-finder/SKILL.md
+curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/registries.json -o .claude/skills/inm-skill-finder/registries.json
+mkdir -p .claude/skills/inm-skill-finder/scripts
+curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/scripts/search_github.ts -o .claude/skills/inm-skill-finder/scripts/search_github.ts
 ```
 
 ## 使用方法
@@ -50,9 +50,9 @@ curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/scri
 安装后，在 Claude Code 中调用技能：
 
 ```
-/find-skill email automation
-/find-skill slack notification
-/find-skill 数据库管理
+/inm-skill-finder email automation
+/inm-skill-finder slack notification
+/inm-skill-finder 数据库管理
 ```
 
 Claude 会自动搜索所有 registry、展示结果并引导你完成安装。
