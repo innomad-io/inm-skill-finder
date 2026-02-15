@@ -1,5 +1,4 @@
 node_modules/
 registries.local.json
-config.yaml
 .DS_Store
 *.log

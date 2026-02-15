@@ -59,14 +59,6 @@ Claude will search across all registries, present results, and guide you through
 
 ## Configuration
 
-### Quick Start
-
-Copy the example config to customize behavior:
-
-```bash
-cp config.example.yaml config.yaml
-```
-
 ### User Preferences
 
 Set default installation behavior in `config.yaml`:
@@ -107,7 +99,7 @@ registries:
     enabled: false
 ```
 
-See `config.example.yaml` for full documentation and all available options.
+See `config.yaml` for full documentation and all available options.
 
 ## Built-in Registries
 

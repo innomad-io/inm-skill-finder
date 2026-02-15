@@ -59,14 +59,6 @@ Claude 会自动搜索所有 registry、展示结果并引导你完成安装。
 
 ## 配置
 
-### 快速开始
-
-复制示例配置文件进行自定义：
-
-```bash
-cp config.example.yaml config.yaml
-```
-
 ### 用户偏好设置
 
 在 `config.yaml` 中设置默认安装行为：
@@ -107,7 +99,7 @@ registries:
     enabled: false
 ```
 
-完整文档和所有可用选项请查看 `config.example.yaml`。
+完整文档和所有可用选项请查看 `config.yaml`。
 
 ## 内置 Registry
 

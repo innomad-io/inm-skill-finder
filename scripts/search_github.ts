@@ -8,8 +8,7 @@
  * README parsing yields no results.
  *
  * Configuration:
- *   config.yaml         — unified YAML config (preferences + registries)
- *   config.example.yaml — example config with documentation
+ *   config.yaml — unified YAML config (preferences + registries, committed to git)
  *   (Legacy: registries.json + registries.local.json still supported)
  *
  * Usage:
