@@ -1,0 +1,46 @@
+{
+  "registries": [
+    {
+      "id": "composio",
+      "repo": "ComposioHQ/awesome-claude-skills",
+      "name": "Awesome Claude Skills by Composio",
+      "description": "940+ SaaS automation skills",
+      "enabled": true
+    },
+    {
+      "id": "anthropic",
+      "repo": "anthropics/skills",
+      "name": "Anthropic Official Skills",
+      "description": "Official reference skills from Anthropic",
+      "enabled": true
+    },
+    {
+      "id": "voltagent",
+      "repo": "VoltAgent/awesome-agent-skills",
+      "name": "Awesome Agent Skills",
+      "description": "370+ multi-tool compatible skills",
+      "enabled": true
+    },
+    {
+      "id": "antigravity",
+      "repo": "sickn33/antigravity-awesome-skills",
+      "name": "Antigravity Awesome Skills",
+      "description": "856+ universal agentic skills",
+      "enabled": true
+    },
+    {
+      "id": "rohitg00",
+      "repo": "rohitg00/awesome-claude-code-skills",
+      "name": "Awesome Claude Code Skills",
+      "description": "Curated list of Claude Code skills (table format)",
+      "enabled": true
+    },
+    {
+      "id": "teterntech",
+      "repo": "TerminalTrend/awesome-claude-code",
+      "name": "Awesome Claude Code",
+      "description": "Community curated Claude Code resources and skills",
+      "enabled": true
+    }
+  ]
+}
