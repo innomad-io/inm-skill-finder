@@ -1,0 +1,4 @@
+node_modules/
+registries.local.json
+.DS_Store
+*.log
