@@ -16,13 +16,21 @@ A Claude Code skill that searches and installs skills from multiple GitHub regis
 
 ## Installation
 
-### As a Claude Code skill (recommended)
+**Recommended method for best compatibility:**
 
 ```bash
-# Project-level
+npx skills add innomad-io/inm-skill-finder
+```
+
+This command uses the [skills.sh](https://skills.sh) CLI tool which provides the most reliable installation experience. It automatically handles skill directory setup, file downloads, and ensures proper integration with Claude Code.
+
+### Installation Options
+
+```bash
+# Project-level (default) — installs to .claude/skills/ in current project
 npx skills add innomad-io/inm-skill-finder
 
-# User-level (global)
+# User-level (global) — installs to ~/.claude/skills/ for all projects
 npx skills add innomad-io/inm-skill-finder -g
 ```
 

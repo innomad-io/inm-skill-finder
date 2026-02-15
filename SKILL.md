@@ -1,5 +1,5 @@
 ---
-name: find-skill
+name: inm-skill-finder
 description: "Search and install Claude Code skills from multiple sources (skills.sh leaderboard, GitHub repositories like awesome-claude-skills and anthropics/skills). Use when user wants to find, discover, search, browse, or install Claude Code skills, plugins, or extensions. Supports non-English keywords through automatic translation."
 disable-model-invocation: true
 allowed-tools: Bash, WebSearch, WebFetch, Read, Write, Glob, Grep, AskUserQuestion, Task

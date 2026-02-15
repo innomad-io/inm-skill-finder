@@ -16,13 +16,21 @@
 
 ## 安装
 
-### 作为 Claude Code 技能安装（推荐）
+**推荐安装方式，以获得最佳兼容性：**
 
 ```bash
-# 项目级别
+npx skills add innomad-io/inm-skill-finder
+```
+
+此命令使用 [skills.sh](https://skills.sh) CLI 工具，提供最可靠的安装体验。它会自动处理技能目录设置、文件下载，并确保与 Claude Code 正确集成。
+
+### 安装选项
+
+```bash
+# 项目级别（默认）— 安装到当前项目的 .claude/skills/ 目录
 npx skills add innomad-io/inm-skill-finder
 
-# 用户级别（全局）
+# 用户级别（全局）— 安装到 ~/.claude/skills/ 供所有项目使用
 npx skills add innomad-io/inm-skill-finder -g
 ```
 
