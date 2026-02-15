@@ -7,9 +7,10 @@
  * name + description + category. Falls back to GitHub Trees API when
  * README parsing yields no results.
  *
- * Registry configuration:
- *   registries.json       — default registries (shipped with skill)
- *   registries.local.json — user overrides (same format, merged at runtime)
+ * Configuration:
+ *   config.yaml         — unified YAML config (preferences + registries)
+ *   config.example.yaml — example config with documentation
+ *   (Legacy: registries.json + registries.local.json still supported)
  *
  * Usage:
  *   npx -y bun run scripts/search_github.ts keyword1 keyword2
@@ -22,6 +23,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
+import { parse as parseYAML } from "yaml";
 
 // --- Types ---
 
@@ -35,6 +37,21 @@ interface Registry {
 
 interface RegistryConfig {
   registries: Registry[];
+}
+
+interface YAMLRegistrySimple {
+  url: string;
+  enabled?: boolean;
+  name?: string;
+  description?: string;
+}
+
+interface YAMLConfig {
+  preferences?: {
+    install_method?: 'npx' | 'direct' | 'git' | 'ask';
+    install_location?: 'project' | 'global' | 'ask';
+  };
+  registries?: YAMLRegistrySimple[];
 }
 
 interface SkillEntry {
@@ -76,6 +93,7 @@ interface CLIArgs {
   descriptions: boolean;
   threshold: number;
   listRegistries: boolean;
+  showPreferences: boolean;
   addRegistry: string | null;
   removeRegistry: string | null;
   enableRegistry: string | null;
@@ -91,13 +109,55 @@ const DESC_WEIGHT = 0.75;
 
 const SCRIPT_DIR = dirname(resolve(process.argv[1] || __filename));
 const BASE_DIR = resolve(SCRIPT_DIR, "..");
+const CONFIG_PATH = resolve(BASE_DIR, "config.yaml");
 const REGISTRIES_PATH = resolve(BASE_DIR, "registries.json");
 const LOCAL_REGISTRIES_PATH = resolve(BASE_DIR, "registries.local.json");
+
+function normalizeGitHubURL(url: string): string {
+  const match = url.match(/github\.com[/:]([\w-]+)\/([\w.-]+)/);
+  if (match) {
+    return `${match[1]}/${match[2].replace(/\.git$/, '')}`;
+  }
+  if (url.includes('/') && !url.includes('github.com')) {
+    return url.replace(/\.git$/, '');
+  }
+  return url;
+}
+
+function registryIDFromRepo(repo: string): string {
+  return repo.replace(/\//g, '-').toLowerCase();
+}
 
 // --- Registry loading ---
 
 function loadRegistries(): Registry[] {
   let registries: Registry[] = [];
+
+  if (existsSync(CONFIG_PATH)) {
+    try {
+      const yamlContent = readFileSync(CONFIG_PATH, "utf-8");
+      const config: YAMLConfig = parseYAML(yamlContent);
+      
+      if (config.registries) {
+        registries = config.registries.map((r) => {
+          const repo = normalizeGitHubURL(r.url);
+          const id = registryIDFromRepo(repo);
+          return {
+            id,
+            repo,
+            name: r.name || repo,
+            description: r.description || "",
+            enabled: r.enabled !== false,
+          };
+        });
+      }
+      return registries;
+    } catch (e) {
+      console.error(
+        JSON.stringify({ warning: `Failed to parse config.yaml: ${(e as Error).message}` })
+      );
+    }
+  }
 
   if (existsSync(REGISTRIES_PATH)) {
     try {
@@ -118,7 +178,6 @@ function loadRegistries(): Registry[] {
         readFileSync(LOCAL_REGISTRIES_PATH, "utf-8")
       );
       const localRegs = local.registries || [];
-      // Merge: local entries override defaults by id or repo
       const merged = new Map<string, Registry>();
       for (const r of registries) merged.set(r.id, r);
       for (const r of localRegs) merged.set(r.id, r);
@@ -131,6 +190,18 @@ function loadRegistries(): Registry[] {
   }
 
   return registries;
+}
+
+function loadPreferences(): YAMLConfig['preferences'] | null {
+  if (!existsSync(CONFIG_PATH)) return null;
+  
+  try {
+    const yamlContent = readFileSync(CONFIG_PATH, "utf-8");
+    const config: YAMLConfig = parseYAML(yamlContent);
+    return config.preferences || null;
+  } catch {
+    return null;
+  }
 }
 
 function saveLocalRegistries(registries: Registry[]): void {
@@ -586,6 +657,7 @@ function parseArgs(argv: string[]): CLIArgs {
   let descriptions = false;
   let threshold = 0.4;
   let listRegistries = false;
+  let showPreferences = false;
   let addRegistry: string | null = null;
   let removeRegistry: string | null = null;
   let enableRegistry: string | null = null;
@@ -596,6 +668,8 @@ function parseArgs(argv: string[]): CLIArgs {
     const arg = argv[i];
     if (arg === "--list-registries") {
       listRegistries = true;
+    } else if (arg === "--show-preferences") {
+      showPreferences = true;
     } else if (arg === "--add-registry" && i + 1 < argv.length) {
       addRegistry = argv[++i];
     } else if (arg === "--remove-registry" && i + 1 < argv.length) {
@@ -620,6 +694,7 @@ function parseArgs(argv: string[]): CLIArgs {
     descriptions,
     threshold,
     listRegistries,
+    showPreferences,
     addRegistry,
     removeRegistry,
     enableRegistry,
@@ -802,6 +877,21 @@ async function cmdSearch(args: CLIArgs): Promise<void> {
   console.log(JSON.stringify(output, null, 2));
 }
 
+function cmdShowPreferences(): void {
+  const prefs = loadPreferences();
+  if (!prefs) {
+    console.log(JSON.stringify({ 
+      preferences: {
+        install_method: 'ask',
+        install_location: 'ask'
+      },
+      source: 'defaults'
+    }));
+  } else {
+    console.log(JSON.stringify({ preferences: prefs, source: 'config.yaml' }));
+  }
+}
+
 // --- Entry point ---
 
 async function main() {
@@ -809,6 +899,11 @@ async function main() {
 
   if (args.listRegistries) {
     cmdListRegistries();
+    return;
+  }
+
+  if (args.showPreferences) {
+    cmdShowPreferences();
     return;
   }
 

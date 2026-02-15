@@ -58,9 +58,25 @@ SKILL_DIR=$(dirname "$SKILL_DIR")  # go up from scripts/ to skill root
 npx -y bun run "$SKILL_DIR/scripts/search_github.ts" keyword1 keyword2 --descriptions
 ```
 
-This searches all enabled registries configured in `registries.json` (default 6 repos) and any user-added registries in `registries.local.json`. It downloads each repo's README, parses skill entries (names, descriptions, categories), and performs fuzzy matching across all fields.
+This searches all enabled registries. Registries are configured in:
+- **config.yaml** (recommended) — unified YAML configuration with simplified registry format
+- **registries.json** + **registries.local.json** (legacy) — still supported for backward compatibility
 
-**Registry management** (run from the skill directory):
+**Preferred: Edit config.yaml directly**
+
+Users can simply add GitHub repo URLs to `config.yaml`:
+
+```yaml
+registries:
+  - url: https://github.com/your-org/your-skills
+    enabled: true
+  - url: owner/repo  # Short format also works
+    enabled: true
+```
+
+Copy `config.example.yaml` to `config.yaml` to get started.
+
+**Alternative: CLI commands** (creates registries.local.json):
 
 ```bash
 # List all registries and their status
@@ -76,8 +92,6 @@ npx -y bun run "$SKILL_DIR/scripts/search_github.ts" --remove-registry owner/rep
 npx -y bun run "$SKILL_DIR/scripts/search_github.ts" --disable-registry composio
 npx -y bun run "$SKILL_DIR/scripts/search_github.ts" --enable-registry composio
 ```
-
-You can also directly edit `registries.local.json` (same format as `registries.json`) to add or configure custom registries.
 
 If the script is not found, fall back to the `skills find` CLI command from Source A.
 
@@ -127,18 +141,29 @@ Extract any GitHub repos that contain SKILL.md files and are relevant.
    - Each option: `"[name] (from [source])"`
    - Question text should be localized based on detected language
 
-### Step 4: Ask Installation Preferences
+### Step 4: Check User Preferences and Ask Installation Options
 
-After the user selects skills, use **AskUserQuestion** to ask TWO questions simultaneously:
+**FIRST: Check if user has predefined preferences in config.yaml:**
 
-**Localize the questions** based on the detected language from Step 1.
+```bash
+SKILL_DIR=$(find ~/.claude/skills .claude/skills -name "search_github.ts" -path "*/inm-skill-finder/*" -exec dirname {} \; 2>/dev/null | head -1)
+SKILL_DIR=$(dirname "$SKILL_DIR")
+PREFS=$(npx -y bun run "$SKILL_DIR/scripts/search_github.ts" --show-preferences 2>/dev/null)
+```
 
-**Question 1 - Installation Method:**
+Parse the JSON output to extract `install_method` and `install_location`:
+- If `install_method` is **not** 'ask': Use that method directly, skip Question 1
+- If `install_location` is **not** 'ask': Use that location directly, skip Question 2
+- If both are 'ask' or undefined: Ask both questions
+
+**If questions are needed**, use **AskUserQuestion** and localize based on detected language from Step 1:
+
+**Question 1 - Installation Method** (ask only if preference is 'ask'):
 - **`npx skills add` (Recommended)** — Uses the skills.sh CLI tool. Easiest and most standard method. Works for skills.sh listings and GitHub repos.
 - **Direct download** — Downloads SKILL.md (and supporting files) directly via curl. Lightweight, no extra tools needed.
 - **`git clone`** — Clones the full repository, then copies the skill directory. Best for skills with many supporting files.
 
-**Question 2 - Installation Level:**
+**Question 2 - Installation Level** (ask only if preference is 'ask'):
 - **Project-level (Recommended)** — Installs to `.claude/skills/` in the current project. Only available in this project.
 - **User-level (global)** — Installs to `~/.claude/skills/`. Available across all your projects.
 

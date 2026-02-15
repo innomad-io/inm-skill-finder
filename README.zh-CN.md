@@ -57,6 +57,58 @@ curl -sL https://raw.githubusercontent.com/innomad-io/inm-skill-finder/main/scri
 
 Claude 会自动搜索所有 registry、展示结果并引导你完成安装。
 
+## 配置
+
+### 快速开始
+
+复制示例配置文件进行自定义：
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+### 用户偏好设置
+
+在 `config.yaml` 中设置默认安装行为：
+
+```yaml
+preferences:
+  # 安装方式：'npx', 'direct', 'git', 或 'ask'（默认：ask）
+  install_method: npx  # 默认使用 npx skills add
+  
+  # 安装位置：'project', 'global', 或 'ask'（默认：ask）
+  install_location: project  # 默认安装到项目级别
+```
+
+设置为具体值后，安装时不会再询问这些选项。使用 `ask` 则每次都会询问。
+
+### Registry 配置
+
+在 `config.yaml` 中使用简单的 GitHub URL 添加或自定义 registry：
+
+```yaml
+registries:
+  # 内置 registry
+  - url: https://github.com/ComposioHQ/awesome-claude-skills
+    enabled: true
+  
+  # 添加自定义 registry
+  - url: https://github.com/your-org/your-skills
+    enabled: true
+    name: "我的自定义技能"  # 可选
+    description: "我的个人技能集合"  # 可选
+  
+  # 短格式也可以
+  - url: owner/repo
+    enabled: true
+  
+  # 禁用某个 registry
+  - url: https://github.com/some-org/repo
+    enabled: false
+```
+
+完整文档和所有可用选项请查看 `config.example.yaml`。
+
 ## 内置 Registry
 
 | Registry | 仓库 | 技能数量 |
@@ -68,7 +120,9 @@ Claude 会自动搜索所有 registry、展示结果并引导你完成安装。
 | rohitg00 | rohitg00/awesome-claude-code-skills | 精选技能（表格格式） |
 | TerminalTrend | TerminalTrend/awesome-claude-code | 社区资源和技能 |
 
-## Registry 管理
+## Registry 管理（命令行）
+
+快速 registry 操作可使用命令行命令（会创建 `registries.local.json`）：
 
 ```bash
 # 列出所有 registry
@@ -85,16 +139,17 @@ npx -y bun run scripts/search_github.ts --disable-registry composio
 npx -y bun run scripts/search_github.ts --enable-registry composio
 ```
 
-自定义 registry 保存在 `registries.local.json`（与 `registries.json` 格式相同），运行时合并，local 条目优先。
+**注意：** 推荐直接编辑 `config.yaml` 以获得更清晰的配置。CLI 命令用于快速操作和向后兼容。
 
 ## 工作原理
 
-1. 从 `registries.json` + `registries.local.json` 加载 registry 配置
+1. 从 `config.yaml` 加载配置（或旧版 `registries.json` + `registries.local.json`）
 2. 并行下载所有启用 registry 的 README（通过 `raw.githubusercontent.com`）
 3. 解析每个 README 中的技能条目（支持列表和表格 Markdown 格式）
 4. 模糊匹配关键词与名称 + 描述（描述权重 0.75x）
 5. 如果 README 解析结果为空，回退到 GitHub Trees API
 6. 输出去重、排序后的 JSON 结果
+7. 遵循用户配置的安装方式和位置偏好（如已配置）
 
 ## 许可证
 

@@ -1,0 +1,58 @@
+# inm-skill-finder Configuration
+# Copy this file to config.yaml and customize as needed
+
+# User Preferences
+# Set default behavior for installation. Use 'ask' to prompt each time.
+preferences:
+  # Installation method: 'npx', 'direct', 'git', or 'ask' (default: ask)
+  # - npx: Uses 'npx skills add' command (recommended, most compatible)
+  # - direct: Direct download via curl (lightweight, no extra tools)
+  # - git: Full git clone with sparse checkout (best for complex skills)
+  # - ask: Prompt user to choose each time
+  install_method: ask
+
+  # Installation location: 'project', 'global', or 'ask' (default: ask)
+  # - project: Installs to .claude/skills/ in current project
+  # - global: Installs to ~/.claude/skills/ for all projects
+  # - ask: Prompt user to choose each time
+  install_location: ask
+
+# Skill Registries
+# List of GitHub repositories to search for skills
+# Just provide the GitHub URL or owner/repo format
+registries:
+  # Built-in registries (enabled by default)
+  - url: https://github.com/ComposioHQ/awesome-claude-skills
+    enabled: true
+    # Optional: custom name and description
+    # name: "Composio Skills"
+    # description: "940+ SaaS automation skills"
+
+  - url: https://github.com/anthropics/skills
+    enabled: true
+
+  - url: https://github.com/VoltAgent/awesome-agent-skills
+    enabled: true
+
+  - url: https://github.com/sickn33/antigravity-awesome-skills
+    enabled: true
+
+  - url: https://github.com/rohitg00/awesome-claude-code-skills
+    enabled: true
+
+  - url: https://github.com/TerminalTrend/awesome-claude-code
+    enabled: true
+
+  # Add your custom registries here:
+  # - url: https://github.com/your-org/your-skills-repo
+  #   enabled: true
+  #   name: "My Custom Skills"
+  #   description: "My personal skill collection"
+
+  # You can also use short format:
+  # - url: owner/repo
+  #   enabled: true
+
+  # Disable a registry by setting enabled: false
+  # - url: https://github.com/ComposioHQ/awesome-claude-skills
+  #   enabled: false

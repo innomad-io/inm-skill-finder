@@ -57,6 +57,58 @@ Once installed, invoke the skill in Claude Code:
 
 Claude will search across all registries, present results, and guide you through installation.
 
+## Configuration
+
+### Quick Start
+
+Copy the example config to customize behavior:
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+### User Preferences
+
+Set default installation behavior in `config.yaml`:
+
+```yaml
+preferences:
+  # Installation method: 'npx', 'direct', 'git', or 'ask' (default: ask)
+  install_method: npx  # Use npx skills add by default
+  
+  # Installation location: 'project', 'global', or 'ask' (default: ask)
+  install_location: project  # Always install to project by default
+```
+
+When set to specific values, you won't be prompted for these choices during installation. Use `ask` to be prompted each time.
+
+### Registry Configuration
+
+Add or customize registries in `config.yaml` using simple GitHub URLs:
+
+```yaml
+registries:
+  # Built-in registries
+  - url: https://github.com/ComposioHQ/awesome-claude-skills
+    enabled: true
+  
+  # Add your custom registries
+  - url: https://github.com/your-org/your-skills
+    enabled: true
+    name: "My Custom Skills"  # Optional
+    description: "My personal collection"  # Optional
+  
+  # Short format also works
+  - url: owner/repo
+    enabled: true
+  
+  # Disable a registry
+  - url: https://github.com/some-org/repo
+    enabled: false
+```
+
+See `config.example.yaml` for full documentation and all available options.
+
 ## Built-in Registries
 
 | Registry | Repo | Skills |
@@ -68,7 +120,9 @@ Claude will search across all registries, present results, and guide you through
 | rohitg00 | rohitg00/awesome-claude-code-skills | Curated skills (table format) |
 | TerminalTrend | TerminalTrend/awesome-claude-code | Community resources and skills |
 
-## Registry Management
+## Registry Management (CLI)
+
+For quick registry operations, you can use CLI commands (creates `registries.local.json`):
 
 ```bash
 # List all registries
@@ -85,16 +139,17 @@ npx -y bun run scripts/search_github.ts --disable-registry composio
 npx -y bun run scripts/search_github.ts --enable-registry composio
 ```
 
-Custom registries are saved to `registries.local.json` (same format as `registries.json`), which is merged at runtime with local entries taking priority.
+**Note:** Editing `config.yaml` directly is recommended for a cleaner configuration. CLI commands are provided for quick operations and backward compatibility.
 
 ## How It Works
 
-1. Load registries from `registries.json` + `registries.local.json`
+1. Load configuration from `config.yaml` (or legacy `registries.json` + `registries.local.json`)
 2. Download READMEs from all enabled registries in parallel via `raw.githubusercontent.com`
 3. Parse skill entries from each README (supports list and table markdown formats)
 4. Fuzzy match keywords against name + description (description weighted at 0.75x)
 5. Fall back to GitHub Trees API if README parsing yields zero entries
 6. Output deduplicated, scored JSON results
+7. Respect user preferences for installation method and location (if configured)
 
 ## License
 
