@@ -6,7 +6,7 @@ A Claude Code skill that searches and installs skills from multiple GitHub regis
 
 ## Features
 
-- **Multi-registry search** — searches 6 built-in registries in parallel, covering 2000+ skills
+- **Multi-registry search** — searches 7 built-in registries in parallel, covering 2000+ skills
 - **README-based parsing** — extracts skill entries from list and table formats, matching against names, descriptions, and categories
 - **Fuzzy matching** — finds relevant skills even with approximate keywords (e.g. searching "email" matches `sendgrid-automation`)
 - **Configurable registries** — add/remove/enable/disable registries via CLI or config file
@@ -108,6 +108,7 @@ See `config.yaml` for full documentation and all available options.
 | Composio | ComposioHQ/awesome-claude-skills | 940+ SaaS automation skills |
 | Anthropic | anthropics/skills | Official reference skills |
 | VoltAgent | VoltAgent/awesome-agent-skills | 370+ multi-tool skills |
+| BehiSecc | BehiSecc/awesome-claude-skills | Community-curated Claude skills |
 | Antigravity | sickn33/antigravity-awesome-skills | 856+ universal skills |
 | rohitg00 | rohitg00/awesome-claude-code-skills | Curated skills (table format) |
 | TerminalTrend | TerminalTrend/awesome-claude-code | Community resources and skills |

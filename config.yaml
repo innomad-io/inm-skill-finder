@@ -34,6 +34,9 @@ registries:
   - url: https://github.com/VoltAgent/awesome-agent-skills
     enabled: true
 
+  - url: https://github.com/BehiSecc/awesome-claude-skills
+    enabled: true
+
   - url: https://github.com/sickn33/antigravity-awesome-skills
     enabled: true
 

@@ -6,7 +6,7 @@
 
 ## 特性
 
-- **多 registry 搜索** — 并行搜索 6 个内置 registry，覆盖 2000+ 技能
+- **多 registry 搜索** — 并行搜索 7 个内置 registry，覆盖 2000+ 技能
 - **基于 README 解析** — 从列表和表格格式中提取技能条目，匹配名称、描述和分类
 - **模糊匹配** — 用近似关键词也能找到相关技能（例如搜索 "email" 可匹配到 `sendgrid-automation`）
 - **可配置 registry** — 通过命令行或配置文件添加/移除/启用/禁用 registry
@@ -108,6 +108,7 @@ registries:
 | Composio | ComposioHQ/awesome-claude-skills | 940+ SaaS 自动化技能 |
 | Anthropic | anthropics/skills | 官方参考技能 |
 | VoltAgent | VoltAgent/awesome-agent-skills | 370+ 多工具技能 |
+| BehiSecc | BehiSecc/awesome-claude-skills | 社区精选 Claude 技能 |
 | Antigravity | sickn33/antigravity-awesome-skills | 856+ 通用技能 |
 | rohitg00 | rohitg00/awesome-claude-code-skills | 精选技能（表格格式） |
 | TerminalTrend | TerminalTrend/awesome-claude-code | 社区资源和技能 |

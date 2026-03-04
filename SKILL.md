@@ -253,7 +253,7 @@ After installation:
 ## Notes
 
 - The `skills` CLI (`npx skills`) is the primary tool from https://skills.sh and supports search, install, update, and removal.
-- The search script uses a configurable registry system (`registries.json` + `registries.local.json`) with 6 default repos including ComposioHQ, Anthropic, VoltAgent, Antigravity, and more.
+- The search script uses a configurable registry system (`registries.json` + `registries.local.json`) with 7 default repos including ComposioHQ, Anthropic, VoltAgent, BehiSecc, Antigravity, and more.
 - READMEs are fetched via `raw.githubusercontent.com` (no API quota consumed). If a README can't be parsed, the script falls back to the GitHub Trees API.
 - Search matches against both skill names and descriptions, so searching "email" will find skills like `sendgrid-automation` whose description mentions email.
 - Skills installed at project-level (`.claude/skills/`) are auto-discovered by Claude Code with live reload.
